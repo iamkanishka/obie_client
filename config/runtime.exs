@@ -52,30 +52,29 @@ if config_env() == :prod do
 
   # Build the runtime config, only including optional keys when set.
 
+  runtime_config =
+    [
+      client_id: client_id,
+      token_url: token_url,
+      private_key_pem: private_key_pem,
+      certificate_pem: certificate_pem,
+      signing_key_id: signing_key_id,
+      financial_id: financial_id
+    ]
 
   runtime_config =
-  [
-    client_id: client_id,
-    token_url: token_url,
-    private_key_pem: private_key_pem,
-    certificate_pem: certificate_pem,
-    signing_key_id: signing_key_id,
-    financial_id: financial_id
-  ]
+    if base_url do
+      Keyword.put(runtime_config, :base_url, base_url)
+    else
+      runtime_config
+    end
 
-runtime_config =
-  if base_url do
-    Keyword.put(runtime_config, :base_url, base_url)
-  else
-    runtime_config
-  end
-
-runtime_config =
-  if customer_ip do
-    Keyword.put(runtime_config, :customer_ip_address, customer_ip)
-  else
-    runtime_config
-  end
+  runtime_config =
+    if customer_ip do
+      Keyword.put(runtime_config, :customer_ip_address, customer_ip)
+    else
+      runtime_config
+    end
 
   config :obie_client, runtime_config
 end
