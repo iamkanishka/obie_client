@@ -27,7 +27,7 @@ Production-grade Elixir client for the **UK Open Banking (OBIE) Read/Write API v
 ```elixir
 # mix.exs
 def deps do
-  [{:obie_client, "~> 1.0"}]
+  [{:obie_client, "~> 1.0.0"}]
 end
 ```
 
