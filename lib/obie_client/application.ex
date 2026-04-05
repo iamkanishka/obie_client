@@ -1,20 +1,17 @@
 defmodule ObieClient.Application do
-  # See https://hexdocs.pm/elixir/Application.html
-  # for more information on OTP Applications
   @moduledoc false
-
   use Application
 
+  @doc false
+  @spec start(Application.start_type(), term()) :: {:ok, pid()} | {:error, term()}
   @impl true
   def start(_type, _args) do
     children = [
-      # Starts a worker by calling: ObieClient.Worker.start_link(arg)
-      # {ObieClient.Worker, arg}
+      ObieClient.Cache,
+      ObieClient.CircuitBreaker.Registry,
+      ObieClient.RateLimiter.Supervisor
     ]
 
-    # See https://hexdocs.pm/elixir/Supervisor.html
-    # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: ObieClient.Supervisor]
-    Supervisor.start_link(children, opts)
+    Supervisor.start_link(children, strategy: :one_for_one, name: ObieClient.Supervisor)
   end
 end
